@@ -1,5 +1,3 @@
-require('dotenv').config()
-const { URL_API, KEY } = process.env
 const axios = require('axios')
 const {recipeRequestedAPI, recipeRequestedDB} = require('./auxiliar')
 const {Recipe, Diet} = require('../db')
@@ -22,7 +20,7 @@ const recipesGetter = async (search) => {
     });
 
     //Pedido Api
-    const apiRecipes100 = await axios.get(`${URL_API}/complexSearch?apiKey=${KEY}&addRecipeInformation=true&number=100`)
+    const apiRecipes100 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=df12eed687cc4b0f8a3990baeda22018&addRecipeInformation=true&number=100`)
 
     //Armado de objetos de API para el front
     const apiRecipes100ok = apiRecipes100.data.results.map(recipe => {

@@ -1,5 +1,3 @@
-require('dotenv').config()
-const { URL_API, KEY } = process.env
 const axios = require('axios')
 const {Recipe, Diet} = require('../db')
 const { recipeRequestedAPI } = require('./auxiliar')
@@ -26,7 +24,7 @@ const recipesById = async(idRecipe) => {
 
     //Busca si el id viene con formato de la api
     else {
-        const apiRecipe = await axios(`${URL_API}/${idRecipe}/information?apiKey=${KEY}`);
+        const apiRecipe = await axios(`https://api.spoonacular.com/recipes/${idRecipe}/information?apiKey=df12eed687cc4b0f8a3990baeda22018`);
         const {id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree} = apiRecipe.data;
         const apiRecipeById = recipeRequestedAPI({id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree})
         return apiRecipeById;
