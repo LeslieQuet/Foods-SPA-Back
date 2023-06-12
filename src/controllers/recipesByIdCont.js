@@ -24,7 +24,7 @@ const recipesById = async(idRecipe) => {
 
     //Busca si el id viene con formato de la api
     else {
-        const apiRecipe = await axios(`https://api.spoonacular.com/recipes/${idRecipe}/information?apiKey=df12eed687cc4b0f8a3990baeda22018`);
+        const apiRecipe = await axios(`https://api.spoonacular.com/recipes/${idRecipe}/information?apiKey=d29a59e3258a48219fc8b4873f6ac44e`);
         const {id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree} = apiRecipe.data;
         const apiRecipeById = recipeRequestedAPI({id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree})
         return apiRecipeById;
