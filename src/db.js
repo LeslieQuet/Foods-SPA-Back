@@ -39,8 +39,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Recipe, Diet } = sequelize.models;
 
 // Relaciones
-Recipe.belongsToMany(Diet, {through: 'Recipe_Diet'})
-Diet.belongsToMany(Recipe, {through: 'Recipe_Diet'})
+Recipe.belongsToMany(Diet, { through: 'Recipe_Diets', foreignKey: 'recipeId' });
+Diet.belongsToMany(Recipe, { through: 'Recipe_Diets', foreignKey: 'dietId' });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
