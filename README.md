@@ -15,5 +15,9 @@
 ## **RUTAS**
 
 ### **/diets**
-Si no recibe querys devuelve un listado de dietas {id, name}. Las dietas provienen de la BD.
+Si no recibe query devuelve un listado de dietas {id, name}. Las dietas provienen de la BD.
 Con query "diet" devuelve un arreglo de recetas que coinciden con la búsqueda, de la bd y la api.
+
+### **/recipes**
+Si no recibe query devuelve todas las recetas de la bd más 50 recetas de la api.
+Con query "search" devuelve las recetas con coincidencia parcial por nombre en bd y api.
