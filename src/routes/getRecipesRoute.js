@@ -7,8 +7,6 @@ module.exports = async(req, res) => {
         res.status(200).json(matchedRecepies);
     }
     catch(error){
-        //res.status(400).send(error.message)
         res.status(400).json({error: error.message})
-        // res.status(400).json({error: error})
     }
 }
