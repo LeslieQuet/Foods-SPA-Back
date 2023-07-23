@@ -1,5 +1,6 @@
 const axios = require('axios')
-const {Diet, Recipe} = require('../db')
+const {Diet, Recipe} = require('../db');
+const { recipeRequestedAPI } = require('./auxiliar');
 
 //Controlador exportado
 const dietsGetter = async (diet) => {
@@ -26,14 +27,20 @@ const dietsManager = async (dietName) => {
                 attributes: [],
               }
             ],
-            attributes: ['id', 'name', 'image'],
+            attributes: ['id', 'name', 'image', 'health_score'],
         });
         
         //Trae todas las recetas de la API que coincidan con la búsqueda
-        const apiRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&diet=${dietName}&number=50`)
+        const apiRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&addRecipeInformation=true&diet=${dietName}&number=50`)
+        
+        //Modifica el formato para el front
+        const apiRecipesOk= apiRecipes.data.results.map(recipe => {
+            const {id, title, image, healthScore} = recipe;
+            return recipeRequestedAPI({id, title, image, healthScore})
+        })
         
         //Concatena ambas busquedas y devuelve
-        const allRecipes = dbRecipes.concat(apiRecipes.data.results);
+        const allRecipes = dbRecipes.concat(apiRecipesOk);
         
         if (!allRecipes.length) throw new Error('No recipes for that diet');
         return allRecipes; 

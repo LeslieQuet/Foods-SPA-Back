@@ -1,22 +1,23 @@
 //Se arma el objeto para el front con info de la API
-const recipeRequestedAPI = (recipe) => {
-    const {id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree} = recipe;
+const recipeRequestedAPI = ({id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree}) => {
 
-    //Responde a consigna del readme: Para los tipos de dieta debes tener en cuenta las propiedades vegetarian, 
-    //vegan y glutenFree por un lado, y también analizar las que se incluyan dentro de la propiedad diets por otro.
-    const dietsOk = new Set();
-        if(vegetarian) dietsOk.add("vegetarian");
-        if(vegan) dietsOk.add("vegan");
-        if(glutenFree) dietsOk.add("gluten free");
-        if(diets) diets.forEach(diet => dietsOk.add(diet));
-        
+    if(diets){
+
+        //Responde a consigna: Para los tipos de dieta debes tener en cuenta las propiedades vegetarian, 
+        //vegan y glutenFree por un lado, y también analizar las que se incluyan dentro de la propiedad diets por otro.
+        const dietsOk = new Set();
+            if(vegetarian) dietsOk.add("vegetarian");
+            if(vegan) dietsOk.add("vegan");
+            if(glutenFree) dietsOk.add("gluten free");
+            if(diets) diets.forEach(diet => dietsOk.add(diet));
+            
         const dietsArr = Array.from(dietsOk)
         
         const stepsOk = []
         if(analyzedInstructions.length){
             analyzedInstructions[0].steps.forEach(step => stepsOk.push(step.step))
         }
-
+    
         let recipeOk = {
             id,
             name: title,
@@ -27,6 +28,14 @@ const recipeRequestedAPI = (recipe) => {
             diets: dietsArr,
         }
         return recipeOk;
+    }
+    let recipeOk = {
+        id,
+        name: title,
+        image,
+        health_score: healthScore
+    }
+    return recipeOk;
 }
 
 //Se arma el objeto para el front con info de la BD

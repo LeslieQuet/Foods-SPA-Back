@@ -3,6 +3,8 @@ const {Recipe, Diet} = require('../db')
 const { recipeRequestedAPI } = require('./auxiliar')
 
 const recipesById = async(idRecipe) => {
+
+    if(!idRecipe || idRecipe === undefined) throw new Error ('Must recibe an identifier');
     //Busca si el id viene con formato de la BD 
     if(idRecipe.includes("-")){
         const dbRecipe = await Recipe.findByPk(idRecipe, {
@@ -13,7 +15,7 @@ const recipesById = async(idRecipe) => {
                     attributes: [],
                 },
             }
-        })
+        });
 
         //Diets viene en un arreglo de objetos, se pasa arreglo de strings
         const dietArray = dbRecipe.diets.map(diet => diet.name);

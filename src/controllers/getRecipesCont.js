@@ -1,6 +1,7 @@
 const axios = require('axios')
 const { Op } = require('sequelize');
-const {Recipe} = require('../db')
+const {Recipe} = require('../db');
+const { recipeRequestedAPI } = require('./auxiliar');
 
 
 const recipesGetter = async (search) => {
@@ -14,14 +15,20 @@ const recipesGetter = async (search) => {
               [Op.like]: `%${search}%`,
             },
           },
-          attributes: ['id', 'name', 'image'],
+          attributes: ['id', 'name', 'image', 'health_score'],
         });
 
         //Busca en la api
-        const apiRecipesByName = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&query=${search}&number=50`)
+        const apiRecipesByName = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&addRecipeInformation=true&query=${search}&number=50`)
+
+        //Modifica el formato para el front
+        const apiRecipesByNameOk= apiRecipesByName.data.results.map(recipe => {
+          const {id, title, image, healthScore} = recipe;
+          return recipeRequestedAPI({id, title, image, healthScore})
+        })
 
         //Concatena resultados y retorna
-        const allRecipesByName = dbRecipesByName.concat(apiRecipesByName.data.results);
+        const allRecipesByName = dbRecipesByName.concat(apiRecipesByNameOk);
 
         if (!allRecipesByName) throw new Error ('No recipes match the search');
         return allRecipesByName
@@ -29,14 +36,20 @@ const recipesGetter = async (search) => {
 
     //Si no recibe query trae todas las recetas de la BD
     const dbRecipes = await Recipe.findAll({
-        attributes: ['id', 'name', 'image'],
+        attributes: ['id', 'name', 'image', 'health_score'],
     })
 
     //Pedido Api
-    const apiRecipes50 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&number=50`)
+    const apiRecipes50 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&addRecipeInformation=true&number=50`)
+
+    //Modifica el formato para el front
+    const apiRecipesOk= apiRecipes50.data.results.map(recipe => {
+      const {id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree} = recipe;
+      return recipeRequestedAPI({id, title, image, summary, healthScore, analyzedInstructions, diets, vegetarian, vegan, glutenFree})
+    })
 
     //Concatena todas las recetas
-    const allRecipes = dbRecipes.concat(apiRecipes50.data.results);
+    const allRecipes = dbRecipes.concat(apiRecipesOk);
     
     return allRecipes;
 }
