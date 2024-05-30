@@ -8,7 +8,7 @@
     "testMocha": "mocha -w ./tests/**/*.spec.js",
     "test": "jest ./index.test.js"
   },
-  "author": "Henry",
+  "author": "Leslie",
   "license": "ISC",
   "engines": {
     "node": ">=12.18.3",
