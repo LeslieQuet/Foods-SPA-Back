@@ -1,6 +1,7 @@
 const axios = require('axios')
 const {Diet, Recipe} = require('../db')
 const {recipeRequestedDB, recipeRequestedAPI} = require('./auxiliar')
+const { API_KEY } = process.env;
 
 //Controlador exportado
 const dietsGetter = async (diet) => {
@@ -35,7 +36,7 @@ const dietsManager = async (diet) => {
         })
         
         //Trae todas las recetas de la API y arma objetos
-        const apiRecipes100 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&addRecipeInformation=true&number=100`)
+        const apiRecipes100 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
         const apiRecipes100ok = apiRecipes100.data.results.map(recipe => {
             return recipeRequestedAPI(recipe);
         })
@@ -55,7 +56,7 @@ const dietsManager = async (diet) => {
     if (DBDiets.length >= 1) return DBDiets;
 
     //Si la BD no tiene dietas las trae de la Api y los Bulkea en la tabla de la BD
-    const apiData = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&addRecipeInformation=true&number=100`);
+    const apiData = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`);
     const recipesData = apiData.data;
 
     const dietsSet = new Set();
