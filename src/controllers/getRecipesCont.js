@@ -3,6 +3,7 @@ const {recipeRequestedAPI, recipeRequestedDB} = require('./auxiliar')
 const {Recipe, Diet} = require('../db')
 
 const recipesGetter = async (search) => {
+
     //Trae todas las recetas de la BD
     const dbRecipes = await Recipe.findAll({
             include: {
@@ -14,16 +15,14 @@ const recipesGetter = async (search) => {
             }
     })
 
-    //Armado de objetos de BD para el front
-    const dbRecipesOk = dbRecipes.map(recipe => {
-        return recipeRequestedDB(recipe);
-    });
+    // Armado de objetos de BD para el front
+    const dbRecipesOk = dbRecipes?.map(recipe => recipeRequestedDB(recipe)) || [];
 
     //Pedido Api
-    const apiRecipes100 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=d29a59e3258a48219fc8b4873f6ac44e&addRecipeInformation=true&number=100`)
-
+    const apiRecipes100 = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=2dc145106b0d49c3ad9498261e6b8b81&addRecipeInformation=true&number=100`)
+        
     //Armado de objetos de API para el front
-    const apiRecipes100ok = apiRecipes100.data.results.map(recipe => {
+    const apiRecipes100ok = apiRecipes100 && apiRecipes100.data.results.map(recipe => {
         return recipeRequestedAPI(recipe);
     })
 

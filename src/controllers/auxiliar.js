@@ -13,7 +13,7 @@ const recipeRequestedAPI = (recipe) => {
         const dietsArr = Array.from(dietsOk)
         
         const stepsOk = []
-        if(analyzedInstructions.length){
+        if(analyzedInstructions && analyzedInstructions.length){
             analyzedInstructions[0].steps.forEach(step => stepsOk.push(step.step))
         }
 
@@ -46,7 +46,6 @@ const recipeRequestedDB = (recipe) => {
 
             return recipeOk;
 }
-
 
 module.exports = {
     recipeRequestedAPI,
